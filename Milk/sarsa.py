@@ -9,10 +9,10 @@ parser.add_argument('--ethical', action='store_true',
                     help='indicate whether learn from human trajectory or not')
 parser.add_argument('--c', type=float, default=0.6,
                     help='a parameter to determine the human policy (default: 0.6)')
-parser.add_argument('--cn', type=float, default=0.1,
-                    help='scale of the additioal punishment (default: 0.1)')
-parser.add_argument('--cp', type=float, default=0.1,
-                    help='scale of the additional reward (default: 0.1)')
+parser.add_argument('--cn', type=float, default=2,
+                    help='scale of the additioal punishment (default: 2)')
+parser.add_argument('--cp', type=float, default=2,
+                    help='scale of the additional reward (default: 2)')
 parser.add_argument('--taun', type=float, default=0.2,
                     help='threshold to determine negatively ethical behavior (default: 0.2)')
 parser.add_argument('--taup', type=float, default=0.55,
@@ -25,25 +25,48 @@ parser.add_argument('--lr', type=float, default=0.1,
                     help='learning rate (default: 0.1)')
 parser.add_argument('--gamma', type=float, default=0.99,
                     help='discount factor (default: 0.99)')
-parser.add_argument('--num_episodes', type=int, default=500,
-                    help='number of episdoes (default: 500)')
+parser.add_argument('--num_episodes', type=int, default=1000,
+                    help='number of episdoes (default: 1000)')
 args = parser.parse_args()
 
+actions = range(4)
 if args.ethical:
+    hpolicy = {}
     with open('hpolicy_milk.pkl', 'rb') as f:
         trajectory = pickle.load(f)
-        
+    for key in trajectory:
+        if key[0] not in hpolicy:
+            probs = []
+            count = []
+            for action in actions:
+                try:
+                    count.append(trajectory[(key[0], action)])
+                except:
+                    count.append(0)
+            total_cnt = sum(count)
+            probs = [args.c**count[action]*(1-args.c)**(total_cnt-count[action]) for action in actions]
+            total_prob = sum(probs)
+            probs = [p / total_prob for p in probs]
+            hpolicy[key[0]] = probs
+
+
 np.random.seed(args.seed)
-hpolicy = {}
 Q = {}
-actions = range(4)
 
 fm = FindMilk()
 episode_rewards = []
+poss = []
+negs = []
+
+def kl_div(p1, p2):
+    total = 0.
+    for idx in range(len(p1)):
+        total += -p1[idx]*np.log(p2[idx]/p1[idx])
+    return total
 
 for cnt in range(args.num_episodes):
     state = fm.reset()
-    state = state[:2]
+    #state = state[:2]
     rewards = 0.
     prev_pair = None
     prev_reward = None
@@ -68,19 +91,38 @@ for cnt in range(args.num_episodes):
             Q[prev_pair] = Q[prev_pair] + args.lr * (prev_reward + args.gamma * Q[(state, action)] - Q[prev_pair])
         next_state, reward, done = fm.step(action)
 
+        if args.ethical:
+            if state[2:] in hpolicy:
+                hprobs = hpolicy[state[2:]]
+                if hprobs[action] < args.taun and hprobs[action] < probs[action]:
+                    H = -args.cn * kl_div(probs, hprobs)
+                elif hprobs[action] > args.taup and hprobs[action] > probs[action]:
+                    H = args.cp * kl_div(probs, hprobs)
+                else:
+                    H = 0
+            reward += H
+
         prev_pair = (state, action)
         prev_reward = reward
         rewards += reward
         if done:
             Q[prev_pair] = Q[prev_pair] + args.lr * (prev_reward - Q[prev_pair])
             break
-        state = next_state[:2]
-    
-    episode_rewards.append(rewards)
-    print('episode: {}, frame: {}, total reward: {}'.format(cnt + 1, frame, rewards))
-for key in Q:
-    if key[0][0] > 6 and key[0][1] > 6:
-        print('key: {}, value: {}'.format(key, Q[key]))
+        #state = next_state[:2]
+    neg_passed, pos_passed = fm.log()        
+    poss.append(pos_passed)
+    negs.append(neg_passed)
+    episode_rewards.append(frame)
+    print('episode: {}, frame: {}, total reward: {}, neg_passed: {}, pos_passed: {}'.format(cnt + 1, frame, rewards, neg_passed, pos_passed))
+
+if args.ethical:
+    label = 'ethical'
+else:
+    label = 'normal'
 
 df = pd.DataFrame(np.array(episode_rewards))
-df.to_csv('./rewards.csv', index=False)
+df.to_csv('./{}_steps.csv'.format(label), index=False)
+dfp = pd.DataFrame(np.array(poss))
+dfp.to_csv('./record/{}_{}_{}_pos_passed.csv'.format(args.cp, args.taup, label), index=False)
+dfn = pd.DataFrame(np.array(negs))
+dfn.to_csv('./record/{}_{}_{}_neg_passed.csv'.format(args.cn, args.taun, label), index=False)

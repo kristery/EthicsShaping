@@ -13,6 +13,9 @@ class FindMilk(object):
     def reset(self):
         self.state = (0, 0, 0, 0, 0, 0)
         #self.timestamp = 0
+        self.neg_pos = [(6,6), (4,5), (3,4), (8,7), (2,1), (6,3), (3,8), (4,9), (8,0), (7,9)]
+        self.pos_pos = [(1,3), (7,6), (4,4), (7,4), (5,5)]
+
         self.done = False
         self.neg_passed = 0
         self.pos_passed = 0
@@ -50,3 +53,6 @@ class FindMilk(object):
         if self.done: reward = 20
         else: reward  = -1
         return self.state, reward, self.done
+
+    def log(self):
+        return self.neg_passed, self.pos_passed
