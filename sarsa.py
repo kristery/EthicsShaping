@@ -2,6 +2,7 @@ import argparse
 import pickle
 from milk import FindMilk
 import numpy as np
+import pandas as pd
 
 parser = argparse.ArgumentParser(description='ethical agent')
 parser.add_argument('--ethical', action='store_true',
@@ -47,30 +48,39 @@ for cnt in range(args.num_episodes):
     prev_pair = None
     prev_reward = None
     frame = 0
+    
     while True:
         frame += 1
         probs = []
         for action in actions:
-            try: probs.append(np.e**(Q[(state, action)]/args.temp))
+            try: 
+                probs.append(np.e**(Q[(state, action)]/args.temp))
             except:
                 Q[(state, action)] = np.random.randn()
                 probs.append(np.e**(Q[(state, action)]/args.temp))
 
         total = sum(probs)
         probs = [p / total for p in probs]
-        action = np.random.choice(4, 1, probs)[0]
+        
+        #print(probs)
+        action = np.random.choice(4, 1, p=probs)[0]
         if prev_pair is not None:
-            Q[prev_pair] += args.lr * (prev_reward + args.gamma * Q[(state, action)] - Q[prev_pair])
-        state, reward, done = fm.step(action)
-        state = state[:2]
+            Q[prev_pair] = Q[prev_pair] + args.lr * (prev_reward + args.gamma * Q[(state, action)] - Q[prev_pair])
+        next_state, reward, done = fm.step(action)
 
         prev_pair = (state, action)
         prev_reward = reward
         rewards += reward
         if done:
-            Q[prev_pair] += args.lr * (prev_reward - Q[prev_pair])
+            Q[prev_pair] = Q[prev_pair] + args.lr * (prev_reward - Q[prev_pair])
             break
+        state = next_state[:2]
+    
     episode_rewards.append(rewards)
     print('episode: {}, frame: {}, total reward: {}'.format(cnt + 1, frame, rewards))
 for key in Q:
-    print('key: {}, value: {}'.format(key, Q[key]))
+    if key[0][0] > 6 and key[0][1] > 6:
+        print('key: {}, value: {}'.format(key, Q[key]))
+
+df = pd.DataFrame(np.array(episode_rewards))
+df.to_csv('./rewards.csv', index=False)

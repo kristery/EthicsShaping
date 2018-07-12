@@ -44,9 +44,9 @@ class FindMilk(object):
         self.state = (next_x, next_y) + tuple([0 + (self.next_pos(x, y, a) in self.pos_pos) 
                                             - (self.next_pos(x, y, a) in self.neg_pos) for a in self.actions])
 
-        if (x, y) == self.milk_pos:
+        if (next_x, next_y) == self.milk_pos:
             self.done = True
 
-        if self.done: reward = 5
-        else: reward  = 0
+        if self.done: reward = 20
+        else: reward  = -1
         return self.state, reward, self.done
