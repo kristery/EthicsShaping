@@ -128,7 +128,8 @@ for cnt in range(args.num_episodes):
     collisions.append(collision)
     cat_hits.append(cat_hit)
     episode_rewards.append(rewards)
-    print('episode: {}, frame: {}, total reward: {}'.format(cnt + 1, frame, rewards))
+    if cnt % 100 == 0:
+        print('episode: {}, frame: {}, total reward: {}'.format(cnt, frame, rewards))
 
 if args.p_ethical:
     label = 'p_ethical'

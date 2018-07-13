@@ -98,7 +98,8 @@ for cnt in range(args.num_episodes):
     cat_hits.append(cat_hit)
     episode_rewards.append(rewards)
     
-    print('episode: {}, frame: {}, total reward: {}'.format(cnt + 1, frame, rewards))
+    if cnt % 100 == 0:
+        print('episode: {}, frame: {}, total reward: {}'.format(cnt, frame, rewards))
 
 label = 'human_p'
 
