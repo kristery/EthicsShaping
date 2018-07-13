@@ -113,7 +113,8 @@ for cnt in range(args.num_episodes):
     poss.append(pos_passed)
     negs.append(neg_passed)
     episode_rewards.append(frame)
-    print('episode: {}, frame: {}, total reward: {}, neg_passed: {}, pos_passed: {}'.format(cnt + 1, frame, rewards, neg_passed, pos_passed))
+    if cnt % 100 == 0:
+        print('episode: {}, frame: {}, total reward: {}, neg_passed: {}, pos_passed: {}'.format(cnt, frame, rewards, neg_passed, pos_passed))
 
 if args.ethical:
     label = 'ethical'
@@ -121,7 +122,7 @@ else:
     label = 'normal'
 
 df = pd.DataFrame(np.array(episode_rewards))
-df.to_csv('./{}_steps.csv'.format(label), index=False)
+df.to_csv('./record/{}_steps.csv'.format(label), index=False)
 dfp = pd.DataFrame(np.array(poss))
 dfp.to_csv('./record/{}_{}_{}_pos_passed.csv'.format(args.cp, args.taup, label), index=False)
 dfn = pd.DataFrame(np.array(negs))

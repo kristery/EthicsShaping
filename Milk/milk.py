@@ -1,4 +1,3 @@
-import numpy as np
 
 class FindMilk(object):
     def __init__(self, width=10):
@@ -33,7 +32,7 @@ class FindMilk(object):
 
     def step(self, action):
         if action not in self.actions:
-            assert "invalid action"
+            raise AssertionError
 
         x, y, _, _, _, _ = self.state
         next_x, next_y = self.next_pos(x, y, action)
