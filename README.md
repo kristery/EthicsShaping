@@ -43,18 +43,18 @@ and
 
 ## Results
 ### Grab a Milk
-![steps.png](./steps.png)
-![neg_passed](./neg_passed.png)
-![pos_passed](./pos_passed.png)
+![steps.png](./images/steps.png)
+![neg_passed](./images/neg_passed.png)
+![pos_passed](./images/pos_passed.png)
 
 In the figures, *neg_passed* suggests the number of babies getting annoyed; therefore, the lower the better. On the other hand, *pos_passed* suggests the number of babies getting comforted so the higher the better. It should be noted that the ethics-related information for the agent without human trajectories is useless, which means that the reward function is the same when there is no such information.
 
 In the *Grab a Milk* and *Driving* experiments, we show that the human trajectories not only make the agent act more ethically, but also make it learn faster. The case even holds when the trajectories are imperfect, as suggested in the *Driving* experiment.
 
 ### Driving
-![performance.png](./performance.png)
-![car_accidient.png](./car_accident.png)
-![cat_hit.png](./cat_hit.png)
+![performance.png](./images/performance.png)
+![car_accidient.png](./images/car_accident.png)
+![cat_hit.png](./images/cat_hit.png)
 
 Since the environment is much more complicated than the *Grab a Milk*, we generate human trajectories by SARSA with a different reward function. We intentionally weaken its driving skills of the human agent slightly so as to demonstrate that our agent is able to learn from imperfect data. 
 
