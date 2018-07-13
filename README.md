@@ -41,10 +41,11 @@ and
 ```python sarsa.py --p_ethical```.
 
 
-
 ## Results
 ### Grab a Milk
-
+![steps.png](./steps.png)
+![neg_passed](./neg_passed.png)
+![pos_passed](./pos_passed.png)
 
 ### Driving
 ![performance.png](./performance.png)

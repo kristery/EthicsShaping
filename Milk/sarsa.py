@@ -124,6 +124,6 @@ else:
 df = pd.DataFrame(np.array(episode_rewards))
 df.to_csv('./record/{}_steps.csv'.format(label), index=False)
 dfp = pd.DataFrame(np.array(poss))
-dfp.to_csv('./record/{}_{}_{}_pos_passed.csv'.format(args.cp, args.taup, label), index=False)
+dfp.to_csv('./record/{:.2f}_{:.2f}_{}_pos_passed.csv'.format(args.cp, args.taup, label), index=False)
 dfn = pd.DataFrame(np.array(negs))
-dfn.to_csv('./record/{}_{}_{}_neg_passed.csv'.format(args.cn, args.taun, label), index=False)
+dfn.to_csv('./record/{:.2f}_{:.2f}_{}_neg_passed.csv'.format(args.cn, args.taun, label), index=False)
