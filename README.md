@@ -56,6 +56,6 @@ In the *Grab a Milk* and *Driving* experiments, we show that the human trajector
 ![car_accidient.png](./images/car_accident.png)
 ![cat_hit.png](./images/cat_hit.png)
 
-Since the environment is much more complicated than the *Grab a Milk*, we generate human trajectories by SARSA with a different reward function. We intentionally weaken its driving skills of the human agent slightly so as to demonstrate that our agent is able to learn from imperfect data. 
+Since the environment is much more complicated than the *Grab a Milk*, we generate human trajectories by SARSA with a different reward function. We intentionally weaken the driving skills of the human agent slightly so as to demonstrate that our agent is able to learn from imperfect data. 
 
 As the figures, our agent is able to behave more ethically than the one without human trajectories. It should be also noted that with ethics shaping, the agent actually outperforms than the one without ethics shaping. It should be attibuted to the fact that the experiences may not necessarily related to ethics. It can also be beneficial to the learning process. 
