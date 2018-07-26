@@ -25,13 +25,13 @@ To see the performance without human trajectories,
 ```Shell
 cd ./Milk/ 
 python sarsa.py
-```.
+```
 
 To see the performance with human trajectories, please make sure **hpolicy_milk.pkl** file exists. If not, generate the human trajectories by
 ```Shell
 python human_policy.py 
 python sarsa.py --ethical
-```.
+```
 
 ### Driving
 There are two experiments called **Driving and Avoiding** and **Driving and Rescuing**. In both cases, there are cars and cats in five lanes. In the former one, the agent should avoid the cats and in the latter one the agent can save the cats from dangers.
@@ -40,19 +40,19 @@ To see the performance without human trajectories,
 ```Shell
 cd ./Drive/ 
 python sarsa.py
-```.
+```
 
 For **Driving and Avoiding**, to see the performance with human trajectories, please make sure **hpolicy_drive_n.pkl** exists. If not, generate the human trajectories by
 ```Shell
 python hsarsa_n.py
 python sarsa.py --n_ethical
-```.
+```
 
 Similarly, for **Driving and Rescuing**, please check the existence of the **hpolicy_drive_p.pkl** file and use
 ```Shell
 python hsarsa_p.py
 python sarsa.py --p_ethical
-```.
+```
 
 
 ## Results
