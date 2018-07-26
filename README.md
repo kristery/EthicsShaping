@@ -1,7 +1,14 @@
 # A Low-Cost Ethics Shaping Approach for Designing Reinforcement Learning Agent (AAAI, 2018)
 
 We propose a low-cost, easily realizable strategy to equip a reinforcement learning (RL) agent the capability of behaving  ethically.  Our  model  allows  the  designers of RL agents to solely focus on the task to achieve, without having to worry about the implementation of multiple trivial ethical patterns to follow. Based on the assumption that the majority of human behavior, regardless which goals they are achieving, is ethical, our design integrates human policy with the RL policy to achieve the target objective with less chance of violating the ethical code that human beings normally obey.
-Please refer to the [paper](https://arxiv.org/pdf/1712.04172.pdf) for more details.
+Please refer to the [paper](https://arxiv.org/pdf/1712.04172.pdf) for more details. If you find this work useful in your research, please cite:
+
+    @article{wu2017low,
+        title={A Low-Cost Ethics Shaping Approach for Designing Reinforcement Learning Agents},
+        author={Wu, Yueh-Hua and Lin, Shou-De},
+        journal={arXiv preprint arXiv:1712.04172},
+        year={2017}
+    }
 
 ## Requirements
 Packages used:
@@ -15,30 +22,37 @@ For detailed settings of the experiments, please refer to the **Experiments** se
 Please see the following instructions to obtain the experiment results. The results will be saved in the **record** folder.
 ### Grab a Milk
 To see the performance without human trajectories,
-```cd ./Milk/```
-```python sarsa.py```.
+```Shell
+cd ./Milk/ 
+python sarsa.py
+```.
 
 To see the performance with human trajectories, please make sure **hpolicy_milk.pkl** file exists. If not, generate the human trajectories by
-```python human_policy.py```
-then
-```python sarsa.py --ethical```.
+```Shell
+python human_policy.py 
+python sarsa.py --ethical
+```.
 
 ### Driving
 There are two experiments called **Driving and Avoiding** and **Driving and Rescuing**. In both cases, there are cars and cats in five lanes. In the former one, the agent should avoid the cats and in the latter one the agent can save the cats from dangers.
 
 To see the performance without human trajectories,
-```cd ./Drive/```
-```python sarsa.py```.
+```Shell
+cd ./Drive/ 
+python sarsa.py
+```.
 
 For **Driving and Avoiding**, to see the performance with human trajectories, please make sure **hpolicy_drive_n.pkl** exists. If not, generate the human trajectories by
-```python hsarsa_n.py```
-then
-```python sarsa.py --n_ethical```.
+```Shell
+python hsarsa_n.py
+python sarsa.py --n_ethical
+```.
 
 Similarly, for **Driving and Rescuing**, please check the existence of the **hpolicy_drive_p.pkl** file and use
-```python hsarsa_p.py```
-and
-```python sarsa.py --p_ethical```.
+```Shell
+python hsarsa_p.py
+python sarsa.py --p_ethical
+```.
 
 
 ## Results
