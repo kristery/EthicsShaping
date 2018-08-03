@@ -43,8 +43,8 @@ class FindMilk(object):
         elif (next_x, next_y) in self.pos_pos: 
             self.pos_pos.remove((next_x, next_y))
             self.pos_passed += 1
-        self.state = (next_x, next_y) + tuple([0 + (self.next_pos(x, y, a) in self.pos_pos) 
-                                            - (self.next_pos(x, y, a) in self.neg_pos) for a in self.actions])
+        self.state = (next_x, next_y) + tuple([0 + (self.next_pos(next_x, next_y, a) in self.pos_pos) 
+                                            - (self.next_pos(next_x, next_y, a) in self.neg_pos) for a in self.actions])
 
         if (next_x, next_y) == self.milk_pos:
             self.done = True

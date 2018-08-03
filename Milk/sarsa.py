@@ -66,12 +66,10 @@ def kl_div(p1, p2):
 
 for cnt in range(args.num_episodes):
     state = fm.reset()
-    #state = state[:2]
     rewards = 0.
     prev_pair = None
     prev_reward = None
     frame = 0
-    
     while True:
         frame += 1
         probs = []
@@ -85,7 +83,6 @@ for cnt in range(args.num_episodes):
         total = sum(probs)
         probs = [p / total for p in probs]
         
-        #print(probs)
         action = np.random.choice(4, 1, p=probs)[0]
         if prev_pair is not None:
             Q[prev_pair] = Q[prev_pair] + args.lr * (prev_reward + args.gamma * Q[(state, action)] - Q[prev_pair])
@@ -108,7 +105,7 @@ for cnt in range(args.num_episodes):
         if done:
             Q[prev_pair] = Q[prev_pair] + args.lr * (prev_reward - Q[prev_pair])
             break
-        #state = next_state[:2]
+        state = next_state
     neg_passed, pos_passed = fm.log()        
     poss.append(pos_passed)
     negs.append(neg_passed)
